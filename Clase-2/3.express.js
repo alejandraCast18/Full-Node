@@ -40,8 +40,8 @@ app.post('/pokemon', (req, res) => {
 })
 
 // la última a la que va a llegar
-//app.use((req, res) => {
- // res.status(404).send('<h1>404</h1>')
+// app.use((req, res) => {
+// res.status(404).send('<h1>404</h1>')
 // })
 
 app.listen(PORT, () => {
