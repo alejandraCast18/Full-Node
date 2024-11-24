@@ -4,9 +4,9 @@
   "description": "",
   "main": "2.routing.js",
   "scripts": {
-    "dev:1": "nodemon 1.http.js",
-    "dev:2": "nodemon Clase-2/2.routing.js",
-    "dev:3": "node --watch 3.express.js"
+    "start:mysql": "node --watch server-with-mysql.js",
+    "start:local": "node --watch server-with-local.js",
+    "test": "echo \"Error: no test specified"\" && exit 1",
   },
   "keywords": [],
   "author": "",
@@ -19,7 +19,15 @@
     "extends": "standard"
   },
   "dependencies": {
-    "eslint": "^8.57.1",
-    "express": "4.21.1"
+    "@eslint/config-array": "^0.19.0",
+    "@eslint/object-schema": "^2.1.4",
+    "cors": "^2.8.5",
+    "eslint": "^9.15.0",
+    "express": "^4.21.1",
+    "glob": "^11.0.0",
+    "mongodb": "^6.11.0",
+    "mysql2": "^3.11.4",
+    "rimraf": "^6.0.1",
+    "zod": "^3.23.8"
   }
 }

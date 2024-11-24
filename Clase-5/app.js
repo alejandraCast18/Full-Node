@@ -1,12 +1,12 @@
 import express, { json } from 'express'; // require -> commonJS
 import { createMovieRouter } from './routes/movies.js';
 import { corsMiddleware } from './middlewares/cors.js';
-import 'dotenv/config';
+import dotenv from 'dotenv';
+dotenv.config();
 
-// después
 export const createApp = ({ movieModel }) => {
   const app = express();
-  app.use(json());
+  app.use(express.json());
   app.use(corsMiddleware());
   app.disable('x-powered-by');
 
