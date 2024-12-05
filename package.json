@@ -2,8 +2,9 @@
   "name": "node-js",
   "version": "1.0.0",
   "description": "",
-  "main": "2.routing.js",
+  "main": "index.js",
   "scripts": {
+    "dev":"node --watch index.js",
     "start:mysql": "node --watch server-with-mysql.js",
     "start:local": "node --watch server-with-local.js",
     "test": "echo \"Error: no test specified"\" && exit 1",
