@@ -37,7 +37,7 @@ app.post('/register', (req, res) => {
 
   try {
     const userId = UserRepository.create({ username, password })
-    res.status(201).send(`Usuario registrado con éxito. ID: ${userId}`)
+    res.status(201).send(`User registered successfully. ID: ${userId}`)
   } catch (error) {
     res.status(400).send(error.message);
   }
@@ -66,5 +66,5 @@ app.get('/logout', (req, res) => {
 })
 
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`)
+  console.log(`Server running on port http://localhost:${PORT}`)
 })
