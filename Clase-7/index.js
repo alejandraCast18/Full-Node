@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { UserRepository } from './db /user-repository.js'
-import { JWT_SECRET, PORT } from './config.js'
+import { JWT_SECRET, PORT } from './db /config.js'
 
 const app = express()
 const __filename = fileURLToPath(import.meta.url)
