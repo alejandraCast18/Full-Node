@@ -1,39 +1,70 @@
 import express from 'express'
-import { PORT } from './config.js'
-import { UserRepository } from './user-repository.js'
+import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
+import jwt from 'jsonwebtoken'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import { UserRepository } from './db /user-repository.js'
+import { JWT_SECRET, PORT } from './config.js'
 
 const app = express()
-app.use(express.json())
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
-app.get('/', (req,res) => {
-    res.send('Raul Armando Mendoza')
+app.set('view engine', 'ejs')
+app.set('views', path.join(__dirname, 'views'))
+app.use(express.static(path.join(__dirname, 'public')))
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cookieParser())
+
+const authenticateToken = (req, res, next) => {
+  const token = req.cookies.token
+  if (!token) return res.redirect('/')
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) return res.redirect('/')
+    req.user = user
+    next()
+  })
+}
+
+app.get('/', (req, res) => {
+  res.render('index', { user: null })
 })
 
-app.post('/login', async (req,res) => {
-    const {username, password} = req.body
-    try {
-        const user = await UserRepository.login({ username,password})
-        res.send({ user })
-    }catch (error){
-        res.status(401).send(error.message)
-    }
+app.post('/register', (req, res) => {
+  const { username, password } = req.body
+
+  try {
+    const userId = UserRepository.create({ username, password })
+    res.status(201).send(`Usuario registrado con éxito. ID: ${userId}`)
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
 })
 
-app.post('/register', (req,res) => {
-    const { username, password } = req.body // ???
-    console.log(username, password)
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body
 
-    try {
-        const id = UserRepository.create({ username, password})
-        res.send({ id })
-    } catch (error){
-        res.status(400).send(error.message)
-    }
+  try {
+    const user = await UserRepository.login({ username, password })
+    const token = jwt.sign(user, JWT_SECRET, { expiresIn: '1h' })
+    res.cookie('token', token, { httpOnly: true })
+    res.redirect('/protected')
+  } catch (error) {
+    res.status(401).send(error.message)
+  }
 })
-app.post('/logout', (req,res) => {})
 
-app.get('/protected', (req,res) => {})
+app.get('/protected', authenticateToken, (req, res) => {
+  res.render('protected', { user: req.user })
+})
+
+app.get('/logout', (req, res) => {
+  res.clearCookie('token')
+  res.redirect('/')
+})
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
+  console.log(`Servidor corriendo en http://localhost:${PORT}`)
 })

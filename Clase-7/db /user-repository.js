@@ -1,5 +1,4 @@
 import crypto from 'node:crypto'
-
 import DBLocal from 'db-local'
 import bcrypt from 'bcrypt' 
 import { SALT_ROUNDS } from './config.js'
@@ -39,8 +38,11 @@ export class UserRepository {
         if (!user) throw new Error ('username does not exists')
 
         const isValid = await bcrypt.compare(password,user.password)
+        if (!isValid) throw new Error('password is invalid')
         
-        return user
+        const { password: _ , ...publicUser} = user
+        
+        return publicUser   
     }
 }
 
